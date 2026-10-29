@@ -12,6 +12,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.stream.Collectors;
 
@@ -54,6 +55,20 @@ public class GlobalExceptionHandler {
         log.warn("并发冲突: {}", e.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(ApiResult.fail("CONCURRENT_MODIFICATION", "该申请单正在被其他人处理，请刷新后重试"));
+    }
+
+    /**
+     * 静态资源缺失（favicon.ico、旧版本 assets 等）。
+     *
+     * <p>这不是服务端故障：浏览器自动请求 favicon 是常态，客户端拿着过期 URL 请求旧 chunk 也很常见。
+     * 必须返回 404 且不打堆栈，否则每打开一次页面日志就刷一片红色 ERROR，
+     * 真正的故障反而被淹没。
+     */
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<ApiResult<Void>> handleNoResource(NoResourceFoundException e) {
+        log.debug("静态资源不存在: {}", e.getResourcePath());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(ApiResult.fail("NOT_FOUND", "资源不存在"));
     }
 
     @ExceptionHandler(Exception.class)

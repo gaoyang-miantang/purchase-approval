@@ -325,25 +325,25 @@
 
 ```bash
 # 1. 登录拿令牌
-TOKEN=$(curl -s -X POST http://localhost:8080/api/auth/login \
+TOKEN=$(curl -s -X POST http://localhost:8000/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{"username":"lijing","password":"123456"}' | sed 's/.*"token":"\([^"]*\)".*/\1/')
 
 # 2. 查看我的待办
-curl -s "http://localhost:8080/api/requests?tab=todo" -H "Authorization: Bearer $TOKEN"
+curl -s "http://localhost:8000/api/requests?tab=todo" -H "Authorization: Bearer $TOKEN"
 
 # 3. 审批通过
-curl -s -X POST "http://localhost:8080/api/requests/1/approve" \
+curl -s -X POST "http://localhost:8000/api/requests/1/approve" \
   -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
   -d '{"comment":"同意"}'
 
 # 4. 复现并发冲突（需 demo-mode=true）
-curl -s -X POST "http://localhost:8080/api/requests/1/approve" \
+curl -s -X POST "http://localhost:8000/api/requests/1/approve" \
   -H "Authorization: Bearer $TOKEN" \
   -H "X-Demo-Delay-Ms: 1200" \
   -H "Content-Type: application/json" -d '{}' &
-curl -s -X POST "http://localhost:8080/api/requests/1/approve" \
+curl -s -X POST "http://localhost:8000/api/requests/1/approve" \
   -H "Authorization: Bearer $TOKEN" \
   -H "X-Demo-Delay-Ms: 1200" \
   -H "Content-Type: application/json" -d '{}' &

@@ -22,3 +22,22 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
+
+# ---------- 本项目 ----------
+# Maven 构建产物
+backend/target/
+
+# 前端依赖与构建产物
+frontend/node_modules/
+frontend/dist/
+backend/src/main/resources/static/assets/
+backend/src/main/resources/static/index.html
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# 系统
+.DS_Store
+Thumbs.db

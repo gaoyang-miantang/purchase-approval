@@ -24,7 +24,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        // 开发态前端跑在 5173，需要跨域；生产打包后同源，不依赖这段配置
+        // 开发态前端跑在 3000，需要跨域；生产打包后同源，不依赖这段配置
         registry.addMapping("/api/**")
                 .allowedOriginPatterns("*")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")

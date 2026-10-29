@@ -1,4 +1,4 @@
-const BASE = "http://127.0.0.1:8080/api";
+const BASE = "http://127.0.0.1:8000/api";
 
 let pass = 0;
 let fail = 0;

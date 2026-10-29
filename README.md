@@ -37,20 +37,32 @@ Spring Boot 3 + Vue 3 前后端分离，单 jar 单端口部署，零外部依�
 
 ## 快速开始
 
-```bash
-# 方式一：直接运行打包产物
-java -jar target/purchase-approval-1.0.0.jar
+**推荐：一键启动（前后端一起起）**
 
-# 方式二：源码运行
-mvn spring-boot:run
+```bash
+bash start.sh          # Linux / macOS / CloudStudio
+start.cmd              # Windows 双击
 ```
 
-**Windows 一键启动**：双击 `start.cmd`（优先用 PATH 里的 java，找不到则回退到项目旁的便携 JDK）。
+启动后：
 
-> 注意：这是本地进程，**关掉窗口或重启电脑后服务就停了**，重新双击 `start.cmd` 即可。
+| 服务 | 地址 |
+| --- | --- |
+| 前端（Vite dev server） | <http://localhost:3000> |
+| 后端（Spring Boot） | <http://localhost:8000> |
+
+**手动启动**
+
+```bash
+# 后端
+cd backend && mvn spring-boot:run
+
+# 前端（另开一个终端）
+cd frontend && npm install && npm run dev
+```
+
+> 注意：这是本地进程，**关掉窗口或重启电脑后服务就停了**，重新执行 `start.sh` 即可。
 > 数据在 H2 内存库里，每次重启都回到初始的 9 条演示数据。
-
-打开 <http://localhost:8080>，使用下方账号登录。
 
 ### 演示账号（密码均为 `123456`）
 
@@ -66,6 +78,7 @@ mvn spring-boot:run
 ## 测试
 
 ```bash
+cd backend
 mvn test                          # 19 个 JUnit 用例
 node scripts/api-check.mjs        # 26 项接口校验（需服务已启动）
 ```
@@ -77,26 +90,29 @@ node scripts/api-check.mjs        # 26 项接口校验（需服务已启动）
 ```bash
 cd frontend
 npm install
-npm run dev      # http://localhost:5173，/api 代理到 8080
-npm run build    # 产物输出到 src/main/resources/static
+npm run dev      # http://localhost:3000，/api 代理到 8000
+npm run build    # 产物输出到 backend/src/main/resources/static
 ```
 
 ## 项目结构
 
 ```
 purchase-approval/
-├── src/main/java/com/acme/purchase/
-│   ├── common/     统一响应、异常处理
-│   ├── config/     配置、拦截器注册、演示数据
-│   ├── domain/     实体与枚举
-│   ├── repo/       JPA 仓储
-│   ├── security/   令牌与登录上下文
-│   ├── service/    业务逻辑（含 ApprovalPolicy）
-│   └── web/        控制器与 DTO
-├── src/test/java/  单元测试 + 集成测试
-├── frontend/       Vue 3 工程
-├── scripts/        接口校验脚本
-└── docs/           设计文档、截图、PPT
+├── start.sh / start.cmd    一键启动脚本（根目录，与课程模板一致）
+├── backend/                后端工程（Spring Boot + Maven）
+│   ├── pom.xml
+│   ├── src/main/java/com/acme/purchase/
+│   │   ├── common/     统一响应、异常处理
+│   │   ├── config/     配置、拦截器注册、演示数据
+│   │   ├── domain/     实体与枚举
+│   │   ├── repo/       JPA 仓储
+│   │   ├── security/   令牌与登录上下文
+│   │   ├── service/    业务逻辑（含 ApprovalPolicy）
+│   │   └── web/        控制器与 DTO
+│   └── src/test/java/  单元测试 + 集成测试
+├── frontend/               Vue 3 工程（Vite）
+├── scripts/                接口校验脚本
+└── docs/                   设计文档、截图、PPT
 ```
 
 ## 文档
